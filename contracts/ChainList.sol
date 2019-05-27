@@ -11,6 +11,8 @@ contract ChainList is Ownable {
     string name;
     string description;
     uint256 price;
+    string category;
+    string url;
   }
 
   // state variables
@@ -22,14 +24,18 @@ contract ChainList is Ownable {
     uint indexed _id,
     address indexed _seller,
     string _name,
-    uint256 _price
+    uint256 _price,
+    string _category,
+    string _url
   );
   event LogBuyArticle(
     uint indexed _id,
     address indexed _seller,
     address indexed _buyer,
     string _name,
-    uint256 _price
+    uint256 _price,
+    string _category,
+    string _url
   );
 
   // deactivate the contract
@@ -38,7 +44,7 @@ contract ChainList is Ownable {
   }
 
   // sell an article
-  function sellArticle(string _name, string _description, uint256 _price) public {
+  function sellArticle(string _name, string _description, uint256 _price, string _category, string _url) public {
     // a new article
     articleCounter++;
 
@@ -49,10 +55,12 @@ contract ChainList is Ownable {
       0x0,
       _name,
       _description,
-      _price
+      _price,
+      _category,
+      _url
     );
 
-    LogSellArticle(articleCounter, msg.sender, _name, _price);
+    LogSellArticle(articleCounter, msg.sender, _name, _price, _category, _url);
   }
 
   // fetch the number of articles in the contract
@@ -110,6 +118,6 @@ contract ChainList is Ownable {
     article.seller.transfer(msg.value);
 
     // trigger the event
-    LogBuyArticle(_id, article.seller, article.buyer, article.name, article.price);
+    LogBuyArticle(_id, article.seller, article.buyer, article.name, article.price, article.category, article.url);
   }
 }

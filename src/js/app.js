@@ -73,7 +73,7 @@ App = {
       for(var i = 0; i < articleIds.length; i++) {
         var articleId = articleIds[i];
         chainListInstance.articles(articleId.toNumber()).then(function(article){
-          App.displayArticle(article[0], article[1], article[3], article[4], article[5]);
+          App.displayArticle(article[0], article[1], article[3], article[4], article[5],article[6],article[7]);
         });
       }
       App.loading = false;
@@ -83,7 +83,7 @@ App = {
     });
   },
 
-  displayArticle: function(id, seller, name, description, price) {
+  displayArticle: function(id, seller, name, description, price,url,cat) {
     var articlesRow = $('#articlesRow');
 
     var etherPrice = web3.fromWei(price, "ether");
@@ -94,11 +94,13 @@ App = {
     articleTemplate.find('.article-price').text(etherPrice + " ETH");
     articleTemplate.find('.btn-buy').attr('data-id', id);
     articleTemplate.find('.btn-buy').attr('data-value', etherPrice);
-
+    articleTemplate.find("#a_img").attr("src",url);
+    articleTemplate.find(".cat").text(cat);
     // seller
     if (seller == App.account) {
       articleTemplate.find('.article-seller').text("You");
       articleTemplate.find('.btn-buy').hide();
+      articleTemplate.find(".panel-footer").hide();
     } else {
       articleTemplate.find('.article-seller').text(seller);
       articleTemplate.find('.btn-buy').show();
@@ -113,6 +115,8 @@ App = {
     var _article_name = $('#article_name').val();
     var _description = $('#article_description').val();
     var _price = web3.toWei(parseFloat($('#article_price').val() || 0), "ether");
+    var _url = $('#article_image').val();
+    var _cat = $('#article_cat').val();
 
     if((_article_name.trim() == '') || (_price == 0)) {
       // nothing to sell
@@ -120,7 +124,7 @@ App = {
     }
 
     App.contracts.ChainList.deployed().then(function(instance) {
-      return instance.sellArticle(_article_name, _description, _price, {
+      return instance.sellArticle(_article_name, _description, _price, _url,_cat,{
         from: App.account,
         gas: 500000
       });
