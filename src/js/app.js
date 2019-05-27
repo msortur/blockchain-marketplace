@@ -3,7 +3,7 @@ App = {
   contracts: {},
   account: 0x0,
   loading: false,
-
+  
   init: function() {
     return App.initWeb3();
   },
@@ -88,7 +88,7 @@ App = {
 
     var etherPrice = web3.fromWei(price, "ether");
 
-    var articleTemplate = $("#articleTemplate");
+    var articleTemplate = $("#articleTemplate").clone();
     articleTemplate.find('.panel-title').text(name);
     articleTemplate.find('.article-description').text(description);
     articleTemplate.find('.article-price').text(etherPrice + " ETH");
@@ -105,7 +105,7 @@ App = {
       articleTemplate.find('.article-seller').text(seller);
       articleTemplate.find('.btn-buy').show();
     }
-
+    
     // add this new article
     articlesRow.append(articleTemplate.html());
   },
